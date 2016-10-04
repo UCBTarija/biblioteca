@@ -13,24 +13,31 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-    </head>
+    </head>    
     <body>
         <h1>Lista de libros </h1>
         <nav>
             <a href="LibroController?accion=ins">Nuevo Libro</a>
         </nav>
+        
         <section>
             <h2>Lista de libros</h2>
             <table border="1">
                 <tr>
                     <th>Codigo</th>
                     <th>Titulo</th>
+                    <th></th>
                 </tr>
                 
-                <% for (Libro libro : (List<Libro>) session.getAttribute("libros")) { %>
+                <% for (Libro libro : (List<Libro>) request.getAttribute("libros")) { %>
                 <tr>
                     <td><%=libro.getCodigo() %></td>
                     <td><%=libro.getTitulo() %></td>
+                    <td><a href="LibroController?accion=del&codigo=<%=libro.getCodigo()%>" 
+                           onClick="return confirm('Desea eliminar el elemento?')">
+                            Eliminar
+                        </a>
+                    </td>                    
                 </tr>           
                 <% }%>
             </table>

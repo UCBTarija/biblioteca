@@ -13,23 +13,23 @@
     </head>
     <body>
         <h1>Nuevo Libro</h1>
-        
-        <table>
-        <form action="LibroController" >
-            <input type="hidden" name="accion" value="ins" />
-            <input type="hidden" name="f" value="1" />
-            <tr>
-                <td>Codigo</td>
-                <td><input type="text" name="codigo" /></td>
-            </tr>    
-            <tr>
-                <td>Titulo</td>
-                <td><input type="text" name="titulo" /></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="Guardar" /></td>
-            </tr>
+
+        <form action="LibroController" method="post">
+            <table>
+                <input type="hidden" name="accion" value="ins" />
+                <input type="hidden" name="f" value="1" />
+                <tr>
+                    <td>Codigo</td>
+                    <td><input type="text" name="codigo" /></td>
+                </tr>    
+                <tr>
+                    <td>Titulo</td>
+                    <td><input type="text" name="titulo" /></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Guardar" /></td>
+                </tr>
+            </table>
         </form>
-        </table>
     </body>
 </html>

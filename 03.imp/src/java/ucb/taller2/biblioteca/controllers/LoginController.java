@@ -6,15 +6,12 @@
 package ucb.taller2.biblioteca.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ucb.taller2.biblioteca.model.Authenticator;
-import ucb.taller2.biblioteca.model.Libro;
 import ucb.taller2.biblioteca.model.User;
 
 /**
@@ -44,18 +41,14 @@ public class LoginController extends HttpServlet {
         String result = authenticator.authenticate(username, password);
         
         if(result.equals("success")){
-            rd = request.getRequestDispatcher("/LibroController");
             User user = new User(username, password);
             request.getSession().setAttribute("user", user);
             
-            List<Libro> libros = new ArrayList();
-            request.getSession().setAttribute("libros", libros);
-            
+            response.sendRedirect("LibroController");
         } else {
-            rd = request.getRequestDispatcher("/error.jsp");
             request.setAttribute("error", "Fallo al iniciar sesión intente de nuevo");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
-        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

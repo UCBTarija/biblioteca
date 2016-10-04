@@ -6,7 +6,6 @@
 package ucb.taller2.biblioteca.controllers;
 
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,35 +42,63 @@ public class LibroController extends HttpServlet {
             case "ins":
                 this.actionNuevo(request, response);
                 break;
+            case "del":
+                this.actionEliminar(request, response);
+                break;
         }
     }
 
     private void actionIndex(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        List<Libro> libros = (List<Libro>) request.getSession().getAttribute("libros");
-        request.setAttribute("libros", libros);        
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        try {
+            request.setAttribute("libros", Libro.getLibros());
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+        } catch (Exception ex) {
+            request.setAttribute("error", ex.toString());
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
     }
 
     private void actionNuevo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (request.getParameter("f")!=null) {
-            Libro libro = new Libro();
-            libro.setCodigo(request.getParameter("codigo"));
-            libro.setTitulo(request.getParameter("titulo"));
+        try {
+            if (request.getParameter("f") != null) {
+                Libro libro = new Libro();
+                libro.setCodigo(request.getParameter("codigo"));
+                libro.setTitulo(request.getParameter("titulo"));
+                libro.guardar();
 
-            List<Libro> libros = (List<Libro>) request.getSession().getAttribute("libros");
-
-            if (libros != null) {
-                libros.add(libro);
+                response.sendRedirect("LibroController");
+            } else {
+                request.getRequestDispatcher("nuevo-libro.jsp").forward(request, response);
             }
-             
-            request.getRequestDispatcher("index.jsp").forward(request, response);           
-            //response.sendRedirect("LibroController/");
-        } else {
-            request.getRequestDispatcher("nuevo-libro.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("error", ex.toString());
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
+    }
+
+    private void actionEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+            String codigo = request.getParameter("codigo");
+            if (codigo == null) {
+                throw new Exception("Debe proporcionar el código del libro");
+            }
+
+            Libro libro = Libro.getById(codigo);
+
+            if (libro != null) {
+                libro.eliminar();
+            } 
+
+            response.sendRedirect("LibroController");
+        } catch (Exception ex) {
+            request.setAttribute("error", ex.toString());
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
 
