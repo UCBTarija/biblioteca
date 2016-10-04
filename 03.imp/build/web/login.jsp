@@ -7,7 +7,7 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <form action="demo.jsp" method="post">
+        <form action="LoginController" method="post">
             <p>Nombre de usuario: <input type="text" name="username" /></p>
             <p>Contraseña: <input type="text" name="password" /></p>
             <p><input type="submit"/></p>

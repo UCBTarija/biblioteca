@@ -1,9 +1,3 @@
-<%-- 
-    Document   : success
-    Created on : 22-09-2016, 03:34:40 PM
-    Author     : ronal
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +6,12 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Bienvenido ${requestScope['user'].username} </h1>
+        <h1>Hello World!</h1>
+        
+        <%
+            String username = request.getParameter("username");
+            out.println("Hola: " + username);
+        %>
+        
     </body>
 </html>

@@ -6,22 +6,20 @@
 package ucb.taller2.biblioteca.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ucb.taller2.biblioteca.model.Authenticator;
 import ucb.taller2.biblioteca.model.Libro;
-import ucb.taller2.biblioteca.model.User;
 
 /**
  *
- * @author ronal
+ * @author admin
  */
-public class LoginController extends HttpServlet {
+@WebServlet(name = "LibroController", urlPatterns = {"/LibroController"})
+public class LibroController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,28 +32,47 @@ public class LoginController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        RequestDispatcher rd = null;
-        Authenticator authenticator = new Authenticator();
-        
-        String result = authenticator.authenticate(username, password);
-        
-        if(result.equals("success")){
-            rd = request.getRequestDispatcher("/LibroController");
-            User user = new User(username, password);
-            request.getSession().setAttribute("user", user);
-            
-            List<Libro> libros = new ArrayList();
-            request.getSession().setAttribute("libros", libros);
-            
-        } else {
-            rd = request.getRequestDispatcher("/error.jsp");
-            request.setAttribute("error", "Fallo al iniciar sesión intente de nuevo");
+
+        String accion = request.getParameter("accion");
+
+        if (accion == null) {
+            this.actionIndex(request, response);
         }
-        rd.forward(request, response);
+
+        switch (accion) {
+            case "ins":
+                this.actionNuevo(request, response);
+                break;
+        }
+    }
+
+    private void actionIndex(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        List<Libro> libros = (List<Libro>) request.getSession().getAttribute("libros");
+        request.setAttribute("libros", libros);        
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    }
+
+    private void actionNuevo(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        if (request.getParameter("f")!=null) {
+            Libro libro = new Libro();
+            libro.setCodigo(request.getParameter("codigo"));
+            libro.setTitulo(request.getParameter("titulo"));
+
+            List<Libro> libros = (List<Libro>) request.getSession().getAttribute("libros");
+
+            if (libros != null) {
+                libros.add(libro);
+            }
+             
+            request.getRequestDispatcher("index.jsp").forward(request, response);           
+            //response.sendRedirect("LibroController/");
+        } else {
+            request.getRequestDispatcher("nuevo-libro.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
