@@ -6,7 +6,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Inicio de Sesión</h1>
         <form action="LoginController" method="post">
             <p>Nombre de usuario: <input type="text" name="username" /></p>
             <p>Contraseña: <input type="text" name="password" /></p>

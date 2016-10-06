@@ -26,30 +26,31 @@ public class LibroDAO {
 
         Connection conn = DAOFactory.getConnection();
         try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
-            
+
             stm.setString(1, libro.getCodigo());
             stm.setString(2, libro.getTitulo());
             return stm.execute();
         }
     }
-    
-    public Libro getById(String codigo) throws Exception{
-       StringBuilder sql = new StringBuilder();
+
+    public Libro getById(String codigo) throws Exception {
+        StringBuilder sql = new StringBuilder();
         sql.append("select * from libro ");
         sql.append(" where codigo = ?");
-        
+
         Libro libro = null;
 
         Connection conn = DAOFactory.getConnection();
         try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
             stm.setString(1, codigo);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 libro = new Libro();
                 libro.setCodigo(rs.getString("codigo"));
                 libro.setTitulo(rs.getString("titulo"));
             }
-        }        
+        }
+        
         return libro;
     }
 
@@ -60,7 +61,7 @@ public class LibroDAO {
 
         Connection conn = DAOFactory.getConnection();
         try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
-            
+
             stm.setString(1, libro.getCodigo());
             return stm.execute();
         }
@@ -74,7 +75,7 @@ public class LibroDAO {
 
         Connection conn = DAOFactory.getConnection();
         try (Statement stm = conn.createStatement()) {
-            
+
             ResultSet rs = stm.executeQuery(sql.toString());
             Libro libro;
             while (rs.next()) {

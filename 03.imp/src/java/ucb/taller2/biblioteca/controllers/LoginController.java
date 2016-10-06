@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ucb.taller2.biblioteca.controllers;
 
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,18 +26,21 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        /* Obtiene el usuario y clave enviado por el formulario*/
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        RequestDispatcher rd = null;
-        Authenticator authenticator = new Authenticator();
-        
+        /* Inicializa el autenticador y valida el usuario y clave*/ 
+        Authenticator authenticator = new Authenticator();        
         String result = authenticator.authenticate(username, password);
         
         if(result.equals("success")){
+            /*Si el usuario es válido, inicializa una instancia de
+            usuario y la almacena en la sesión*/
             User user = new User(username, password);
             request.getSession().setAttribute("user", user);
             
+            /*se redirige al controlador de libros*/
             response.sendRedirect("LibroController");
         } else {
             request.setAttribute("error", "Fallo al iniciar sesión intente de nuevo");

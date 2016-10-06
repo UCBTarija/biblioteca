@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ucb.taller2.biblioteca.controllers;
 
 import java.io.IOException;
@@ -34,6 +29,7 @@ public class LibroController extends HttpServlet {
 
         String accion = request.getParameter("accion");
 
+        //si no se especificó la acción entonces es INDEX
         if (accion == null) {
             this.actionIndex(request, response);
         }
@@ -51,8 +47,11 @@ public class LibroController extends HttpServlet {
     private void actionIndex(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            /* Carga la lista de libros en la variable "libros" del objeto 
+            request para que pase a la siguiente vista*/
             request.setAttribute("libros", Libro.getLibros());
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            /* carga la siguiente vista */
+            request.getRequestDispatcher("/libro/index.jsp").forward(request, response);
 
         } catch (Exception ex) {
             request.setAttribute("error", ex.toString());
@@ -64,17 +63,26 @@ public class LibroController extends HttpServlet {
             throws ServletException, IOException {
 
         try {
+            /*el parámetro f indica que es el retorno de un formulario*/
             if (request.getParameter("f") != null) {
+                /* Se inicializa un objeto libro con los parámetros recibidos
+                del formulario*/
                 Libro libro = new Libro();
                 libro.setCodigo(request.getParameter("codigo"));
                 libro.setTitulo(request.getParameter("titulo"));
+                
+                /* Guarda el libro en la BD*/
                 libro.guardar();
 
+                /*para una respuesta post se hará una redirección a la siguiente ventana (get)*/
                 response.sendRedirect("LibroController");
             } else {
-                request.getRequestDispatcher("nuevo-libro.jsp").forward(request, response);
+                /*si no existe el parámetro f significa que es la primera vez que se ejeucta
+                por lo tanto hay que mostrar el formulario*/
+                request.getRequestDispatcher("/libro/nuevo-libro.jsp").forward(request, response);
             }
         } catch (Exception ex) {
+            /*en caso de existir un error se carga la vista error.jsp*/
             request.setAttribute("error", ex.toString());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
@@ -88,13 +96,13 @@ public class LibroController extends HttpServlet {
             if (codigo == null) {
                 throw new Exception("Debe proporcionar el código del libro");
             }
-
+            /*carga el libro que se desea eliminar*/
             Libro libro = Libro.getById(codigo);
 
             if (libro != null) {
                 libro.eliminar();
             } 
-
+            /*ante cada acción sobre una bd se realiza una redirección*/
             response.sendRedirect("LibroController");
         } catch (Exception ex) {
             request.setAttribute("error", ex.toString());
