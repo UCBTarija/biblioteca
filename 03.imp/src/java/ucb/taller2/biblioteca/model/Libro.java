@@ -8,8 +8,8 @@ import ucb.taller2.biblioteca.model.dao.DAOFactory;
  * @author admin
  */
 public class Libro {
-    private String codigo;
-    private String titulo;
+    private String codigo = "";
+    private String titulo = "";
 
     public static Libro getById(String codigo) throws Exception{
         return DAOFactory.getLibroDAO().getById(codigo);
@@ -23,6 +23,10 @@ public class Libro {
         return DAOFactory.getLibroDAO().nuevoLibro(this);
     }
     
+    public boolean modificar() throws Exception{
+        return DAOFactory.getLibroDAO().modificarLibro(this);
+    }
+
     public boolean eliminar() throws Exception{
         return DAOFactory.getLibroDAO().eliminarLibro(this);
     }

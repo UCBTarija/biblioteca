@@ -38,6 +38,10 @@
                             Eliminar
                         </a>
                     </td>                    
+                    <td><a href="LibroController?accion=upd&codigo=<%=libro.getCodigo()%>">
+                            Modificar
+                        </a>
+                    </td>                    
                 </tr>           
                 <% }%>
             </table>

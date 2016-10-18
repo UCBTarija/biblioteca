@@ -4,6 +4,7 @@
     Author     : admin
 --%>
 
+<%@page import="ucb.taller2.biblioteca.model.Libro"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,23 +14,15 @@
     </head>
     <body>
         <h1>Nuevo Libro</h1>
-
-        <form action="LibroController" method="post">
-            <table>
-                <input type="hidden" name="accion" value="ins" />
-                <input type="hidden" name="f" value="1" />
-                <tr>
-                    <td>Codigo</td>
-                    <td><input type="text" name="codigo" /></td>
-                </tr>    
-                <tr>
-                    <td>Titulo</td>
-                    <td><input type="text" name="titulo" /></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Guardar" /></td>
-                </tr>
-            </table>
-        </form>
+        <%
+            Libro libro = (Libro)request.getAttribute("libro");
+        %>
+        <div class="form">
+            <jsp:include page="libro-form.jsp">
+                <jsp:param name="accion" value="ins" />
+                <jsp:param name="codigo" value="<%=libro.getCodigo()%>" />
+                <jsp:param name="titulo" value="<%=libro.getTitulo()%>" />
+            </jsp:include>            
+        </div>       
     </body>
 </html>

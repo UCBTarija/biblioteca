@@ -41,6 +41,9 @@ public class LibroController extends HttpServlet {
             case "del":
                 this.actionEliminar(request, response);
                 break;
+            case "upd":
+                this.actionModificar(request, response);
+                break;
         }
     }
 
@@ -79,7 +82,44 @@ public class LibroController extends HttpServlet {
             } else {
                 /*si no existe el parámetro f significa que es la primera vez que se ejeucta
                 por lo tanto hay que mostrar el formulario*/
+                request.setAttribute("libro", new Libro());
                 request.getRequestDispatcher("/libro/nuevo-libro.jsp").forward(request, response);
+            }
+        } catch (Exception ex) {
+            /*en caso de existir un error se carga la vista error.jsp*/
+            request.setAttribute("error", ex.toString());
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+        }
+    }
+
+    private void actionModificar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+            String codigo = request.getParameter("codigo");
+            if (codigo == null) {
+                throw new Exception("Debe proporcionar el código del libro");
+            }
+            /*carga el libro que se desea modificar*/
+            Libro libro = Libro.getById(codigo);
+            
+            /*el parámetro f indica que es el retorno de un formulario*/
+            if (request.getParameter("f") != null) {
+                /* Se modifica el libro con los parámetros recibidos
+                del formulario*/
+                libro.setCodigo(request.getParameter("codigo"));
+                libro.setTitulo(request.getParameter("titulo"));
+                
+                /* Guarda el libro en la BD*/
+                libro.modificar();
+
+                /*para una respuesta post se hará una redirección a la siguiente ventana (get)*/
+                response.sendRedirect("LibroController");
+            } else {
+                /*si no existe el parámetro f significa que es la primera vez que se ejeucta
+                por lo tanto hay que mostrar el formulario con los datos del libro*/
+                request.setAttribute("libro", libro);
+                request.getRequestDispatcher("/libro/modificar-libro.jsp").forward(request, response);
             }
         } catch (Exception ex) {
             /*en caso de existir un error se carga la vista error.jsp*/

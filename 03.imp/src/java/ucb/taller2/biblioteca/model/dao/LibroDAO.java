@@ -54,6 +54,21 @@ public class LibroDAO {
         return libro;
     }
 
+    public boolean modificarLibro(Libro libro) throws Exception {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" update libro set");
+        sql.append(" titulo = ?");
+        sql.append(" where codigo = ?");
+
+        Connection conn = DAOFactory.getConnection();
+        try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
+            
+            stm.setString(1, libro.getTitulo());
+            stm.setString(2, libro.getCodigo());
+            return stm.execute();
+        }
+    }
+
     public boolean eliminarLibro(Libro libro) throws Exception {
         StringBuilder sql = new StringBuilder();
         sql.append("delete from libro ");
