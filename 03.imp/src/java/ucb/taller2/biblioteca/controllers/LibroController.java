@@ -28,13 +28,14 @@ public class LibroController extends HttpServlet {
             throws ServletException, IOException {
 
         String accion = request.getParameter("accion");
-
         //si no se especificó la acción entonces es INDEX
         if (accion == null) {
-            this.actionIndex(request, response);
+            accion = "idx";
         }
 
         switch (accion) {
+            case "idx":
+                this.actionIndex(request, response);
             case "ins":
                 this.actionNuevo(request, response);
                 break;
@@ -100,8 +101,9 @@ public class LibroController extends HttpServlet {
             if (codigo == null) {
                 throw new Exception("Debe proporcionar el código del libro");
             }
+            
             /*carga el libro que se desea modificar*/
-            Libro libro = Libro.getById(codigo);
+            Libro libro = Libro.getById(codigo);            
             
             /*el parámetro f indica que es el retorno de un formulario*/
             if (request.getParameter("f") != null) {
@@ -114,11 +116,12 @@ public class LibroController extends HttpServlet {
                 libro.modificar();
 
                 /*para una respuesta post se hará una redirección a la siguiente ventana (get)*/
-                response.sendRedirect("LibroController");
+                response.sendRedirect("LibroController");                
             } else {
                 /*si no existe el parámetro f significa que es la primera vez que se ejeucta
                 por lo tanto hay que mostrar el formulario con los datos del libro*/
                 request.setAttribute("libro", libro);
+                System.out.println("Pasando a vista..." + codigo);
                 request.getRequestDispatcher("/libro/modificar-libro.jsp").forward(request, response);
             }
         } catch (Exception ex) {

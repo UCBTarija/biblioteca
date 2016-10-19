@@ -2,8 +2,8 @@
 
 <form action="LibroController" method="post">
     <table>
-        <input type="hidden" name="accion" value="${param.accion}" />
         <input type="hidden" name="f" value="1" />
+        <input type="hidden" name="accion" value="${param.accion}" />
         <tr>
             <td>Codigo</td>
             <td><input type="text" name="codigo" value="${param.codigo}" /></td>

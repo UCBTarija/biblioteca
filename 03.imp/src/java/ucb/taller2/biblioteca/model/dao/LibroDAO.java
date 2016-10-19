@@ -24,8 +24,8 @@ public class LibroDAO {
         sql.append("insert into libro (codigo,titulo) ");
         sql.append("values(?,?)");
 
-        Connection conn = DAOFactory.getConnection();
-        try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
+        try (Connection conn = DAOFactory.getConnection();
+                PreparedStatement stm = conn.prepareStatement(sql.toString())) {
 
             stm.setString(1, libro.getCodigo());
             stm.setString(2, libro.getTitulo());
@@ -35,13 +35,14 @@ public class LibroDAO {
 
     public Libro getById(String codigo) throws Exception {
         StringBuilder sql = new StringBuilder();
-        sql.append("select * from libro ");
+        sql.append("select codigo,titulo from libro ");
         sql.append(" where codigo = ?");
 
         Libro libro = null;
 
-        Connection conn = DAOFactory.getConnection();
-        try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
+        try (Connection conn = DAOFactory.getConnection();
+                PreparedStatement stm = conn.prepareStatement(sql.toString())) {
+
             stm.setString(1, codigo);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
@@ -50,7 +51,7 @@ public class LibroDAO {
                 libro.setTitulo(rs.getString("titulo"));
             }
         }
-        
+
         return libro;
     }
 
@@ -60,9 +61,9 @@ public class LibroDAO {
         sql.append(" titulo = ?");
         sql.append(" where codigo = ?");
 
-        Connection conn = DAOFactory.getConnection();
-        try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
-            
+        try (Connection conn = DAOFactory.getConnection();
+                PreparedStatement stm = conn.prepareStatement(sql.toString())) {
+
             stm.setString(1, libro.getTitulo());
             stm.setString(2, libro.getCodigo());
             return stm.execute();
@@ -74,8 +75,8 @@ public class LibroDAO {
         sql.append("delete from libro ");
         sql.append("where codigo = ?");
 
-        Connection conn = DAOFactory.getConnection();
-        try (PreparedStatement stm = conn.prepareStatement(sql.toString())) {
+        try (Connection conn = DAOFactory.getConnection();
+                PreparedStatement stm = conn.prepareStatement(sql.toString())) {
 
             stm.setString(1, libro.getCodigo());
             return stm.execute();
@@ -88,8 +89,8 @@ public class LibroDAO {
 
         List<Libro> libros = new ArrayList();
 
-        Connection conn = DAOFactory.getConnection();
-        try (Statement stm = conn.createStatement()) {
+        try (Connection conn = DAOFactory.getConnection();
+                Statement stm = conn.createStatement()) {
 
             ResultSet rs = stm.executeQuery(sql.toString());
             Libro libro;

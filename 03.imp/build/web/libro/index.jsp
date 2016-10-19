@@ -13,32 +13,38 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link rel="stylesheet" href="css/estilo.css"/>
     </head>    
     <body>
-        <h1>Lista de libros </h1>
+        <header>
+            <h1>Lista de libros </h1>
+        </header>
         <nav>
-            <a href="LibroController?accion=ins">Nuevo Libro</a>
+            <ul>
+                <li><a href="LoginController?accion=menu">Inicio</a></li>
+                <li><a href="LoginController?accion=logout">Salir</a></li>
+            </ul>
         </nav>
-        
+
         <section>
-            <h2>Lista de libros</h2>
-            <table border="1">
+            <a href="LibroController?accion=ins" class="boton">Nuevo Libro</a>
+            <table class="tbl-datos">
                 <tr>
                     <th>Codigo</th>
                     <th>Titulo</th>
                     <th></th>
                 </tr>
-                
-                <% for (Libro libro : (List<Libro>) request.getAttribute("libros")) { %>
+
+                <% for (Libro libro : (List<Libro>) request.getAttribute("libros")) {%>
                 <tr>
-                    <td><%=libro.getCodigo() %></td>
-                    <td><%=libro.getTitulo() %></td>
-                    <td><a href="LibroController?accion=del&codigo=<%=libro.getCodigo()%>" 
+                    <td><%=libro.getCodigo()%></td>
+                    <td><%=libro.getTitulo()%></td>
+                    <td>
+                        <a href="LibroController?accion=del&codigo=<%=libro.getCodigo()%>" 
                            onClick="return confirm('Desea eliminar el elemento?')">
                             Eliminar
                         </a>
-                    </td>                    
-                    <td><a href="LibroController?accion=upd&codigo=<%=libro.getCodigo()%>">
+                        <a href="LibroController?accion=upd&codigo=<%=libro.getCodigo()%>">
                             Modificar
                         </a>
                     </td>                    

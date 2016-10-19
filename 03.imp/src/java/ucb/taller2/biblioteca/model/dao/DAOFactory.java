@@ -20,11 +20,17 @@ public class DAOFactory {
        
         // Inicializa un objeto de conexto
         Context ctx = new InitialContext();
-
+        if(ctx==null){
+            throw new Exception("No existe el contexto");
+        }
+        
         // Utiliza el objeto de contexto para buscar el recurso DataSource
         DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/Biblioteca");
+        if(ds==null){
+            throw new Exception("No se obtuvo el origen de datos");
+        }
         
-        // Devuelve la conexión a la base de datos
+        // Devuelve la conexión a la base de datos        
         return ds.getConnection();
     }
     
